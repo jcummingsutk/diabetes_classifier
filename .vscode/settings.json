@@ -1,0 +1,25 @@
+{
+    "python.languageServer": "Pylance",
+    "black-formatter.path": [
+        "black",
+    ],
+    "flake8.path": [
+        "/home/jcummings/.local/bin/flake8"
+    ],
+    "isort.path": [
+        "/home/jcummings/.local/bin/isort"
+    ],
+    "mypy-type-checker.path": [
+        "/home/jcummings/.local/bin/mypy"
+    ],
+    "mypy-type-checker.args": [
+        "--config-file=mypy.ini"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+}
