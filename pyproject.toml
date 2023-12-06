@@ -4,10 +4,12 @@ version = "0.0.1"
 description = ""
 authors = ["John Cummings <jcummingsutk@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "package_placeholder" }]
+packages = [{ include = "diabetes_classifier" }]
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.12"
+python = ">=3.10, <3.12"
+dvc = "^3.32.0"
+dvc-s3 = "^2.23.0"
 
 
 [tool.poetry.group.dev.dependencies]

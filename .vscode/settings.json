@@ -1,5 +1,6 @@
 {
     "python.languageServer": "Pylance",
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
     "black-formatter.path": [
         "black",
     ],

@@ -1,0 +1,5 @@
+outs:
+- md5: 0c84b09d240b72e8180bceff3965d1bd
+  size: 22738151
+  hash: md5
+  path: diabetes.csv
