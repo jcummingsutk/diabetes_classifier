@@ -1,4 +1,4 @@
 [core]
     remote = myremote
 ['remote "myremote"']
-    url = s3://ml-datasets-jtcummings/diabetes
+    url = azure://diabetes2023
