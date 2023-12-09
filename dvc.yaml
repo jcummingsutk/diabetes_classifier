@@ -1,0 +1,8 @@
+stages:
+  process raw diabetes data:
+    cmd: poetry run python diabetes_classifier/data/process_data.py
+    deps:
+      - diabetes_classifier/data/process_data.py
+      - data/raw/diabetes.csv
+    outs: 
+      - data/processed/diabetes.csv

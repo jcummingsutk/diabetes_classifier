@@ -1,0 +1,18 @@
+schema: '2.0'
+stages:
+  process raw diabetes data:
+    cmd: poetry run python diabetes_classifier/data/process_data.py
+    deps:
+    - path: data/raw/diabetes.csv
+      hash: md5
+      md5: 8f90e44047182c5f32d10f0c4dd4890f
+      size: 22738154
+    - path: diabetes_classifier/data/process_data.py
+      hash: md5
+      md5: 0d08c7c92a33f452068ab8431a995dd8
+      size: 524
+    outs:
+    - path: data/processed/diabetes.csv
+      hash: md5
+      md5: f850c11ca5cc8eb371289e5886184de7
+      size: 13240878
