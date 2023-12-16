@@ -16,3 +16,42 @@ stages:
       hash: md5
       md5: 14ba73e3c24e0e8540e50c893781d405
       size: 11576227
+  process_raw_diabetes_data:
+    cmd: poetry run python diabetes_classifier/data/process_data.py
+    deps:
+    - path: data/raw/diabetes.csv
+      hash: md5
+      md5: 8f90e44047182c5f32d10f0c4dd4890f
+      size: 22738154
+    - path: diabetes_classifier/data/process_data.py
+      hash: md5
+      md5: bf7d862d444842c9797645902a9fa46d
+      size: 537
+    outs:
+    - path: data/processed/diabetes.csv
+      hash: md5
+      md5: 14ba73e3c24e0e8540e50c893781d405
+      size: 11576227
+  create_train_test_data:
+    cmd: poetry run python diabetes_classifier/data/create_train_test_data.py
+    deps:
+    - path: data/processed/diabetes.csv
+      hash: md5
+      md5: 14ba73e3c24e0e8540e50c893781d405
+      size: 11576227
+    - path: diabetes_classifier/data/create_train_test_data.py
+      hash: md5
+      md5: ccd6960a075f966b32af86465731a759
+      size: 749
+    params:
+      params.yaml:
+        xgboost_training.training_percentage: 0.8
+    outs:
+    - path: data/processed/test.pkl
+      hash: md5
+      md5: 0151e15e9a0843fdd916d4ab94ac22fb
+      size: 9336334
+    - path: data/processed/train.pkl
+      hash: md5
+      md5: f22d2bff6884caa88d2aab56ff373aa7
+      size: 37342610
