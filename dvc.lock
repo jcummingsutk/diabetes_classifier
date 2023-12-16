@@ -9,10 +9,10 @@ stages:
       size: 22738154
     - path: diabetes_classifier/data/process_data.py
       hash: md5
-      md5: 0d08c7c92a33f452068ab8431a995dd8
-      size: 524
+      md5: ff63c4fce06961b387c071d5dd6728d1
+      size: 562
     outs:
     - path: data/processed/diabetes.csv
       hash: md5
-      md5: f850c11ca5cc8eb371289e5886184de7
-      size: 13240878
+      md5: 14ba73e3c24e0e8540e50c893781d405
+      size: 11576227

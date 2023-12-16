@@ -8,7 +8,7 @@ def process_data(df_raw: pd.DataFrame) -> pd.DataFrame:
         df_raw[col] = df_raw[col].astype(int)
     df_raw.rename(columns={"Diabetes_binary": "Diabetes"}, inplace=True)
     output_data_file = os.path.join("data", "processed", "diabetes.csv")
-    df_raw.to_csv(output_data_file)
+    df_raw.to_csv(output_data_file, index=False)
     return df_raw
 
 
