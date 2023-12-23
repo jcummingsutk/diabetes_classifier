@@ -1,5 +1,6 @@
 {
     "python.languageServer": "Pylance",
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
     "black-formatter.path": [
         "black",
     ],
@@ -19,7 +20,7 @@
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.organizeImports": true
+            "source.organizeImports": "explicit"
         }
     },
 }
