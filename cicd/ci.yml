@@ -30,6 +30,8 @@ steps:
 - script: |
     poetry run dvc pull
   displayName: 'Pull data with dvc'
+  env:
+    AZURE_STORAGE_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
 
 - task: Bash@3
   inputs:
