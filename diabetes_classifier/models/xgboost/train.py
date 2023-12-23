@@ -10,7 +10,13 @@ import seaborn as sns
 from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
 from hyperopt.pyll.base import scope
 from imblearn.over_sampling import SMOTE
-from sklearn.metrics import fbeta_score, recall_score, roc_auc_score
+from sklearn.metrics import (
+    accuracy_score,
+    fbeta_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from sklearn.model_selection import KFold
 from xgboost import XGBClassifier
 
@@ -32,6 +38,8 @@ def score_xgboost_classifier(
     metrics["auc"] = roc_auc_score(y_test, pred_probas)
     metrics["recall"] = recall_score(y_test, preds)
     metrics["f_score"] = fbeta_score(y_test, preds, beta=beta)
+    metrics["precision"] = precision_score(y_test, preds)
+    metrics["accuracy_score"] = accuracy_score(y_test, preds)
 
     return metrics
 
@@ -47,14 +55,18 @@ def hyperopt_optimize_function(
 ) -> dict[str, any]:
     with mlflow.start_run(nested=True):
         losses = []
-
         for X_train, y_train, X_eval, y_eval in zip(
             X_train_list, y_train_list, X_eval_list, y_eval_list
         ):
             clf = XGBClassifier(**space)
-            print("starting")
-            clf.fit(X_train, y_train)
-            print("ending")
+            clf.fit(
+                X_train,
+                y_train,
+                eval_set=[(X_eval, y_eval)],
+                early_stopping_rounds=20,
+                eval_metric="auc",
+                verbose=True,
+            )
             beta = 1.2
             eval_metrics = score_xgboost_classifier(
                 clf=clf,
@@ -65,7 +77,7 @@ def hyperopt_optimize_function(
 
             for key, val in eval_metrics.items():
                 mlflow.log_metric(key=key, value=val)
-            losses.append(eval_metrics["f_score"])
+            losses.append(eval_metrics["auc"])
             test_metrics = score_xgboost_classifier(
                 clf,
                 X_test=X_test,
@@ -107,7 +119,7 @@ def create_cross_validation(
         X_eval = df_eval[features]
         y_eval = df_eval[target_column]
 
-        smt = SMOTE()
+        smt = SMOTE(random_state=42, k_neighbors=3)
         X_train_sm, y_train_sm = smt.fit_resample(X_train, y_train)
         X_train_list.append(X_train_sm)
         y_train_list.append(y_train_sm)
@@ -126,12 +138,13 @@ def train_xgboost_classifier(
     n_folds: int = 5,
 ) -> XGBClassifier:
     space = {
-        "eta": hp.uniform("eta", 0.05, 0.8),
-        "max_depth": scope.int(hp.quniform("max_depth", 2, 200, 1)),
+        "eta": hp.uniform("eta", 0, 1.0),
+        "max_depth": scope.int(hp.quniform("max_depth", 2, 20, 1)),
         "subsample": hp.uniform("subsample", 0, 1),
-        "n_estimators": scope.int(hp.quniform("n_estimators", 20, 10000, 25)),
-        "gamma": hp.uniform("gamma", 0, 1),
-        "min_child_weight": hp.uniform("min_child_weight", 0, 100000),
+        "colsample_bytree": hp.uniform("colsample_bytree", 0, 1),
+        "n_estimators": scope.int(hp.quniform("n_estimators", 20, 5000, 25)),
+        "gamma": hp.uniform("gamma", 0, 0.3),
+        "min_child_weight": hp.uniform("min_child_weight", 0, 1),
         "nthread": 4,
     }
     X_train_list, y_train_list, X_eval_list, y_eval_list = create_cross_validation(
