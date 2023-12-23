@@ -2,14 +2,14 @@
 
 [[package]]
 name = "adlfs"
-version = "2023.10.0"
+version = "2023.12.0"
 description = "Access Azure Datalake Gen1 with fsspec and dask"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "adlfs-2023.10.0-py3-none-any.whl", hash = "sha256:dfdc8cc782bd78262435fb1bc2a8cfdbdd80342bb1b1ae9dfff968de912b0b09"},
-    {file = "adlfs-2023.10.0.tar.gz", hash = "sha256:f5cf06c5b0074d17d43838d4c434791a98420d9e768b36a1a02c7b3930686543"},
+    {file = "adlfs-2023.12.0-py3-none-any.whl", hash = "sha256:da6e391afd002c7bb1b75dcc286b78fdf5dbf29aca0f984462033df6311b4e7e"},
+    {file = "adlfs-2023.12.0.tar.gz", hash = "sha256:a590694ed9f5a45741e82bff8bcf88c30a790da949310817330b5e7992b8a9e9"},
 ]
 
 [package.dependencies]
@@ -18,10 +18,11 @@ azure-core = ">=1.23.1,<2.0.0"
 azure-datalake-store = ">=0.0.46,<0.1"
 azure-identity = "*"
 azure-storage-blob = ">=12.12.0"
-fsspec = ">=2023.9.0"
+fsspec = ">=2023.12.0"
 
 [package.extras]
 docs = ["furo", "myst-parser", "numpydoc", "sphinx"]
+tests = ["arrow", "dask[dataframe]", "docker", "pytest", "pytest-mock"]
 
 [[package]]
 name = "aiobotocore"
@@ -269,14 +270,14 @@ files = [
 
 [[package]]
 name = "argcomplete"
-version = "3.1.6"
+version = "3.2.1"
 description = "Bash tab completion for argparse"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "argcomplete-3.1.6-py3-none-any.whl", hash = "sha256:71f4683bc9e6b0be85f2b2c1224c47680f210903e23512cfebfe5a41edfd883a"},
-    {file = "argcomplete-3.1.6.tar.gz", hash = "sha256:3b1f07d133332547a53c79437527c00be48cca3807b1d4ca5cab1b26313386a6"},
+    {file = "argcomplete-3.2.1-py3-none-any.whl", hash = "sha256:30891d87f3c1abe091f2142613c9d33cac84a5e15404489f033b20399b691fec"},
+    {file = "argcomplete-3.2.1.tar.gz", hash = "sha256:437f67fb9b058da5a090df505ef9be0297c4883993f3f56cb186ff087778cfb4"},
 ]
 
 [package.extras]
@@ -1469,14 +1470,14 @@ webhdfs-kerberos = ["dvc-webhdfs[kerberos] (==2.19)"]
 
 [[package]]
 name = "dvc-azure"
-version = "2.23.0"
+version = "3.0.1"
 description = "azure plugin for dvc"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "dvc-azure-2.23.0.tar.gz", hash = "sha256:d3e1b69f5cac445fe0825e6190eb145b650f3a6e98d44c5914148c7ceac44328"},
-    {file = "dvc_azure-2.23.0-py3-none-any.whl", hash = "sha256:bb1fcfd7e6e40240169407dee1fa0a7b213c561ef436b1d78c757501416fde7a"},
+    {file = "dvc-azure-3.0.1.tar.gz", hash = "sha256:4c1ef26396f6016045b7cf809f1c8ac8fea1a178ba71d1d58ed7df6a94557c77"},
+    {file = "dvc_azure-3.0.1-py3-none-any.whl", hash = "sha256:c862c5bb27de81b2303ef332e0f8804b08ab8cbcf00d592fefc1ffbfe8e6ad80"},
 ]
 
 [package.dependencies]
@@ -1486,7 +1487,7 @@ dvc = "*"
 knack = "*"
 
 [package.extras]
-tests = ["Pygments (==2.10.0)", "collective.checkdocs (==0.2)", "crc32c (==2.3.post0)", "dvc[testing]", "filelock (==3.3.2)", "flaky (==3.7.0)", "mock (==4.0.3)", "mypy (==0.981)", "pydocstyle (==6.1.1)", "pylint (==2.16.2)", "pylint-plugin-utils (==0.6)", "pytest (==7.2.0)", "pytest-cov (==3.0.0)", "pytest-docker (>=1,<2)", "pytest-lazy-fixture (==0.6.3)", "pytest-mock (==3.6.1)", "pytest-servers[azure] (==0.2.6)", "pytest-test-utils (==0.0.8)", "pytest-xdist (==2.4.0)", "pywin32 (>=225)", "types-requests (==2.25.11)", "types-tabulate (==0.8.3)", "types-toml (==0.10.1)", "wget (==3.2)", "wheel (==0.37.0)", "xmltodict (==0.12.0)"]
+tests = ["Pygments (==2.10.0)", "collective.checkdocs (==0.2)", "crc32c (==2.3.post0)", "dvc[testing]", "filelock (==3.3.2)", "flaky (==3.7.0)", "mock (==4.0.3)", "mypy (==0.981)", "pydocstyle (==6.1.1)", "pylint (==2.16.2)", "pylint-plugin-utils (==0.6)", "pytest (==7.2.0)", "pytest-cov (==3.0.0)", "pytest-docker (>=1,<2)", "pytest-lazy-fixture (==0.6.3)", "pytest-mock (==3.6.1)", "pytest-servers[azure] (>=0.3.0)", "pytest-test-utils (==0.0.8)", "pytest-xdist (==2.4.0)", "pywin32 (>=225)", "types-requests (==2.25.11)", "types-tabulate (==0.8.3)", "types-toml (==0.10.1)", "wget (==3.2)", "wheel (==0.37.0)", "xmltodict (==0.12.0)"]
 
 [[package]]
 name = "dvc-data"
@@ -4295,6 +4296,21 @@ files = [
 six = ">=1.5"
 
 [[package]]
+name = "python-dotenv"
+version = "1.0.0"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python-dotenv-1.0.0.tar.gz", hash = "sha256:a8df96034aae6d2d50a4ebe8216326c61c3eb64836776504fcca410e5937a3ba"},
+    {file = "python_dotenv-1.0.0-py3-none-any.whl", hash = "sha256:f5971a9226b701070a4bf2c38c89e5a3f0d64de8debda981d1db98583009122a"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 name = "pytz"
 version = "2023.3.post1"
 description = "World timezone definitions, modern and historical"
@@ -5747,4 +5763,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10, <3.12"
-content-hash = "63d02a49a6d0ff1ffa75e50cd6bf335dc217eafd842a13ef45946a648b3eb9a3"
+content-hash = "b4cd3a5f11593a9119606d48633e2e7ad12088ca5e35cac6e262107710e379b1"
