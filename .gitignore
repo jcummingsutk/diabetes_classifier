@@ -162,3 +162,5 @@ cython_debug/
 local_notebooks
 mlruns
 old
+docker_build_context/*.whl
+docker_build_context/*.gz

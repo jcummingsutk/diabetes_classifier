@@ -23,6 +23,8 @@ plotly = "^5.18.0"
 nbformat = "^5.9.2"
 dvc-azure = "^3.0.1"
 python-dotenv = "^1.0.0"
+seaborn = "^0.13.0"
+azureml-mlflow = "^1.54.0.post1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -31,7 +33,6 @@ black = "^23.11.0"
 flake8 = "^6.1.0"
 pre-commit = "^3.5.0"
 ipykernel = "^6.27.1"
-seaborn = "^0.13.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,6 +1,7 @@
 import argparse
 import warnings
 from argparse import Namespace
+from collections import defaultdict
 from functools import partial
 
 import mlflow
@@ -46,23 +47,25 @@ def score_xgboost_classifier(
 
 def hyperopt_optimize_function(
     space: dict[str, any],
-    X_train_list: list[pd.DataFrame],
-    y_train_list: list[pd.Series],
-    X_eval_list: list[pd.DataFrame],
-    y_eval_list: list[pd.Series],
+    X_train_list_cv: list[pd.DataFrame],
+    y_train_list_cv: list[pd.Series],
+    X_eval_list_cv: list[pd.DataFrame],
+    y_eval_list_cv: list[pd.Series],
+    X_train: pd.DataFrame,
+    y_train: pd.DataFrame,
     X_test: pd.DataFrame,
     y_test: pd.Series,
 ) -> dict[str, any]:
     with mlflow.start_run(nested=True):
-        losses = []
-        for X_train, y_train, X_eval, y_eval in zip(
-            X_train_list, y_train_list, X_eval_list, y_eval_list
+        eval_metrics_cv: dict[str, any] = defaultdict(lambda: [])
+        for X_train_cv, y_train_cv, X_eval_cv, y_eval_cv in zip(
+            X_train_list_cv, y_train_list_cv, X_eval_list_cv, y_eval_list_cv
         ):
             clf = XGBClassifier(**space)
             clf.fit(
-                X_train,
-                y_train,
-                eval_set=[(X_eval, y_eval)],
+                X_train_cv,
+                y_train_cv,
+                eval_set=[(X_eval_cv, y_eval_cv)],
                 early_stopping_rounds=20,
                 eval_metric="auc",
                 verbose=True,
@@ -70,36 +73,64 @@ def hyperopt_optimize_function(
             beta = 1.2
             eval_metrics = score_xgboost_classifier(
                 clf=clf,
-                X_test=X_eval,
-                y_test=y_eval,
+                X_test=X_eval_cv,
+                y_test=y_eval_cv,
                 beta=beta,
             )
 
-            for key, val in eval_metrics.items():
-                mlflow.log_metric(key=key, value=val)
-            losses.append(eval_metrics["auc"])
-            test_metrics = score_xgboost_classifier(
-                clf,
-                X_test=X_test,
-                y_test=y_test,
-                beta=beta,
-            )
-            for key, val in test_metrics.items():
-                mlflow.log_metric(key=f"{key}_test", value=val)
-            mlflow.xgboost.log_model(clf, "model")
-            for param_name, param_value in space.items():
-                mlflow.log_param(key=param_name, value=param_value)
+            for metric_name, metric_val in eval_metrics.items():
+                eval_metrics_cv[metric_name].append(metric_val)
+        clf = XGBClassifier(**space)
+        clf.fit(
+            X_train,
+            y_train,
+            eval_set=[(X_test, y_test)],
+            early_stopping_rounds=20,
+            eval_metric="auc",
+            verbose=True,
+        )
+        test_metrics = score_xgboost_classifier(
+            clf,
+            X_test=X_test,
+            y_test=y_test,
+            beta=beta,
+        )
 
-        return {"loss": -np.mean(losses), "status": STATUS_OK, "model": clf}
+        for metric_name, metric_val in test_metrics.items():
+            mlflow.log_metric(key=f"{metric_name}_test", value=metric_val)
+
+        avg_eval_metrics = {key: np.mean(vals) for key, vals in eval_metrics_cv.items()}
+
+        for metric_name, metric_val in avg_eval_metrics.items():
+            mlflow.log_metric(key=f"{metric_name}_eval", value=metric_val)
+
+        # mlflow.xgboost.log_model(clf, "model")
+        for param_name, param_value in space.items():
+            mlflow.log_param(key=param_name, value=param_value)
+        mlflow.xgboost.log_model(clf, "model")
+        return {
+            "loss": -np.mean(avg_eval_metrics["auc"]),
+            "status": STATUS_OK,
+            "model": clf,
+        }
 
 
 def create_cross_validation(
     df_train: pd.DataFrame, features: list[str], target_column: str, n_folds: int = 5
-) -> tuple[list[pd.DataFrame], list[pd.Series], list[pd.DataFrame], list[pd.Series]]:
-    print(df_train.info())
+) -> tuple[
+    list[pd.DataFrame],
+    list[pd.Series],
+    list[pd.DataFrame],
+    list[pd.Series],
+    pd.DataFrame,
+    pd.Series,
+]:
+    smt = SMOTE(random_state=42, k_neighbors=3)
+    X_train_total = df_train[features]
+    y_train_total = df_train[target_column]
 
     kf = KFold(n_splits=n_folds, shuffle=True, random_state=42)
-    split = kf.split(df_train)
+    split = kf.split(X_train_total, y_train_total)
 
     X_train_list: list[pd.DataFrame] = []
     y_train_list: list[pd.Series] = []
@@ -107,27 +138,30 @@ def create_cross_validation(
     X_eval_list: list[pd.DataFrame] = []
     y_eval_list: list[pd.Series] = []
 
-    print("creating cross validation with smote")
-    for i, (train_index, test_index) in enumerate(split):
-        print(f"On cross validation set {i+1} of {n_folds}")
-        df_eval = df_train.iloc[test_index]
-        df_train_ = df_train.iloc[train_index]
+    print("creating cross validation")
+    for _, (train_index, test_index) in enumerate(split):
+        X_train, y_train = (
+            X_train_total.iloc[train_index],
+            y_train_total.iloc[train_index],
+        )
+        X_eval, y_eval = X_train_total.iloc[test_index], y_train_total.iloc[test_index]
 
-        X_train = df_train_[features]
-        y_train = df_train_[target_column]
+        X_train_smt, y_train_smt = smt.fit_resample(X_train, y_train)
 
-        X_eval = df_eval[features]
-        y_eval = df_eval[target_column]
-
-        smt = SMOTE(random_state=42, k_neighbors=3)
-        X_train_sm, y_train_sm = smt.fit_resample(X_train, y_train)
-        X_train_list.append(X_train_sm)
-        y_train_list.append(y_train_sm)
+        X_train_list.append(X_train_smt)
+        y_train_list.append(y_train_smt)
 
         X_eval_list.append(X_eval)
         y_eval_list.append(y_eval)
-    print("done creating cross validation with smote")
-    return X_train_list, y_train_list, X_eval_list, y_eval_list
+    print("done creating cross validation")
+    return (
+        X_train_list,
+        y_train_list,
+        X_eval_list,
+        y_eval_list,
+        X_train_smt,
+        y_train_smt,
+    )
 
 
 def train_xgboost_classifier(
@@ -147,7 +181,14 @@ def train_xgboost_classifier(
         "min_child_weight": hp.uniform("min_child_weight", 0, 1),
         "nthread": 4,
     }
-    X_train_list, y_train_list, X_eval_list, y_eval_list = create_cross_validation(
+    (
+        X_train_list_cv,
+        y_train_list_cv,
+        X_eval_list_cv,
+        y_eval_list_cv,
+        X_train,
+        y_train,
+    ) = create_cross_validation(
         df_train,
         features,
         target_column,
@@ -159,24 +200,26 @@ def train_xgboost_classifier(
 
     func_to_optimize = partial(
         hyperopt_optimize_function,
-        X_train_list=X_train_list,
-        y_train_list=y_train_list,
-        X_eval_list=X_eval_list,
-        y_eval_list=y_eval_list,
+        X_train_list_cv=X_train_list_cv,
+        y_train_list_cv=y_train_list_cv,
+        X_eval_list_cv=X_eval_list_cv,
+        y_eval_list_cv=y_eval_list_cv,
+        X_train=X_train,
+        y_train=y_train,
         X_test=X_test,
         y_test=y_test,
     )
     trials = Trials()
     rstate = np.random.default_rng(42)
-    best = fmin(
+    _ = fmin(
         fn=func_to_optimize,
         space=space,
         algo=tpe.suggest,
-        max_evals=100,
+        max_evals=10,
         trials=trials,
         rstate=rstate,
     )
-    print(best)
+
     sorted_trials = sorted(trials, key=lambda x: x["result"]["loss"])
     sorted_trials[0]["result"]["model"]
     return
@@ -207,7 +250,6 @@ def main():
 
     features = [col for col in df_train.columns if col != target_column]
     mlflow.set_experiment("diabetes_prediction")
-
     with mlflow.start_run():
         _ = train_xgboost_classifier(
             df_train=df_train,
