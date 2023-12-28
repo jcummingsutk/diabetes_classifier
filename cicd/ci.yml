@@ -25,6 +25,8 @@ steps:
     pip install pipx
     pipx install poetry
     poetry install
+    poetry build
+    cp dist/* ./docker_build_context/
   displayName: 'Install dependencies'
 
 - script: |
