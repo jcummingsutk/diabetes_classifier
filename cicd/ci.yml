@@ -39,9 +39,9 @@ steps:
   inputs:
     targetType: 'inline'
     script: 'poetry run python cicd/update_data.py'
+  displayName: 'Update data in blob storage'
   env: 
     STAGING_DATA_BLOB_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
-    STAGING_DATA_CONTAINER_NAME: $(STAGING-DATA-CONTAINER-NAME)
 
 - task: Bash@3
   inputs:
@@ -49,9 +49,4 @@ steps:
     script: 'poetry run python cicd/create_training_environment.py'
   displayName: 'Create training environment'
   env: 
-    AZURE_ML_RESOURCE_GROUP_NAME: $(AZURE-ML-RESOURCE-GROUP-NAME)
-    AZURE_ML_WORKSPACE_NAME: $(AZURE-ML-WORKSPACE-NAME)
-    AZURE_ML_SUBSCRIPTION_ID: $(AZURE-ML-SUBSCRIPTION-ID)
-    AZURE_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
-    AZURE_TENANT_ID: $(AZURE-SERVICE-PRINCIPAL-TENANT-ID)
-    AZURE_CLIENT_ID: $(AZURE-SERVICE-PRINCIPAL-CLIENT-ID)
+    SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
