@@ -41,7 +41,6 @@ steps:
     script: 'poetry run python cicd/update_data.py'
   env: 
     STAGING_DATA_BLOB_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
-    STAGING_DATA_CONTAINER_NAME: $(STAGING-DATA-CONTAINER-NAME)
 
 - task: Bash@3
   inputs:
