@@ -39,6 +39,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: 'poetry run python cicd/update_data.py'
+  displayName: 'Update data in blob storage'
   env: 
     STAGING_DATA_BLOB_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
 
