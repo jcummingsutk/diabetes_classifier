@@ -2,7 +2,10 @@ import os
 
 from azure.storage.blob import BlobClient, BlobServiceClient
 
+from diabetes_classifier.env_vars import load_env
+
 if __name__ == "__main__":
+    load_env()
     connection_string = os.environ["STAGING_DATA_BLOB_CONNECTION_STRING"]
     staging_data_container_name = os.environ["STAGING_DATA_CONTAINER_NAME"]
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
@@ -18,7 +21,8 @@ if __name__ == "__main__":
     for blob_filename in blobs:
         print(blob_filename)
         with open(blob_filename, "rb") as f:
-            # blob_client = container_client.get_blob_client(blob_filename)
+            print(f"connection string: {connection_string}")
+            print(f"staging data container name: {staging_data_container_name}")
             blob_client = BlobClient.from_connection_string(
                 conn_str=connection_string,
                 container_name=staging_data_container_name,

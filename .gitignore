@@ -162,3 +162,4 @@ cython_debug/
 local_notebooks
 mlruns
 old
+environment_variable_config_secrets.env
