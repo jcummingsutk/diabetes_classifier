@@ -18,7 +18,6 @@ if __name__ == "__main__":
     for blob_filename in blobs:
         print(blob_filename)
         with open(blob_filename, "rb") as f:
-            # blob_client = container_client.get_blob_client(blob_filename)
             blob_client = BlobClient.from_connection_string(
                 conn_str=connection_string,
                 container_name=staging_data_container_name,
