@@ -29,27 +29,27 @@ steps:
     cp dist/* ./docker_build_context/
   displayName: 'Install dependencies'
 
-- script: |
-    poetry run dvc pull
-  displayName: 'Pull data with dvc'
-  env:
-    AZURE_STORAGE_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
+# - script: |
+#     poetry run dvc pull
+#   displayName: 'Pull data with dvc'
+#   env:
+#     AZURE_STORAGE_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
 
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'poetry run python cicd/update_data.py'
-  displayName: 'Update data in blob storage'
-  env: 
-    STAGING_DATA_BLOB_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
+# - task: Bash@3
+#   inputs:
+#     targetType: 'inline'
+#     script: 'poetry run python cicd/update_data.py'
+#   displayName: 'Update data in blob storage'
+#   env: 
+#     STAGING_DATA_BLOB_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
 
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'poetry run python cicd/create_training_environment.py'
-  displayName: 'Create training environment'
-  env: 
-    SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
+# - task: Bash@3
+#   inputs:
+#     targetType: 'inline'
+#     script: 'poetry run python cicd/create_training_environment.py'
+#   displayName: 'Create training environment'
+#   env: 
+#     SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
 
 - task: Bash@3
   inputs:
