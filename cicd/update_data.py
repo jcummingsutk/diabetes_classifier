@@ -2,7 +2,10 @@ import os
 
 from azure.storage.blob import BlobClient, BlobServiceClient
 
+from diabetes_classifier.env_vars import load_env
+
 if __name__ == "__main__":
+    load_env()
     connection_string = os.environ["STAGING_DATA_BLOB_CONNECTION_STRING"]
     staging_data_container_name = os.environ["STAGING_DATA_CONTAINER_NAME"]
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
