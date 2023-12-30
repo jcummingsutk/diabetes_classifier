@@ -58,3 +58,4 @@ steps:
   displayName: 'Submit training job'
   env: 
     SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
+
