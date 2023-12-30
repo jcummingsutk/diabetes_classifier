@@ -33,6 +33,7 @@ if __name__ == "__main__":
         credential=EnvironmentCredential(),
     )
     env_version = Environment.list(ws)[os.environ["TRAINING_ENVIRONMENT_NAME"]].version
+    print(f"using environment version {env_version}")
 
     command_job = command(
         code=os.path.join("diabetes_classifier", "models", "xgboost"),
