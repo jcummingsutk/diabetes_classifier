@@ -42,7 +42,7 @@ if __name__ == "__main__":
             "diabetes_classifier_models",
             "xgboost",
         ),
-        command="python train.py --num-folds 5 --train-data ${{inputs.train_data}} --test-data ${{inputs.test_data}} --num-hyperopt-evals 1000 --num-hyperopt-trials-to-log 20 --target-column Diabetes",
+        command="python train.py --num-folds 5 --train-data ${{inputs.train_data}} --test-data ${{inputs.test_data}} --num-hyperopt-evals 100 --num-hyperopt-trials-to-log 20 --target-column Diabetes",
         environment=f"{os.environ['TRAINING_ENVIRONMENT_NAME']}:{env_version}",
         inputs={
             "train_data": Input(
