@@ -21,7 +21,7 @@ if __name__ == "__main__":
     )
     env_name = os.environ["TRAINING_ENVIRONMENT_NAME"]
     build = DockerBuildContext.from_local_directory(
-        workspace=ws, path="./docker_build_context/"
+        workspace=ws, path="./docker_model_build_context/"
     )
     env = Environment.from_docker_build_context(
         name=env_name, docker_build_context=build

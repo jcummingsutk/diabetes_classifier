@@ -36,8 +36,13 @@ if __name__ == "__main__":
     print(f"using environment version {env_version}")
 
     command_job = command(
-        code=os.path.join("diabetes_classifier", "models", "xgboost"),
-        command="python train.py --num-folds 3 --train-data ${{inputs.train_data}} --test-data ${{inputs.test_data}} --target-column Diabetes",
+        code=os.path.join(
+            "diabetes_classifier",
+            "diabetes_classifier_models",
+            "diabetes_classifier_models",
+            "xgboost",
+        ),
+        command="python train.py --num-folds 5 --train-data ${{inputs.train_data}} --test-data ${{inputs.test_data}} --num-hyperopt-evals 1000 --num-hyperopt-trials-to-log 20 --target-column Diabetes",
         environment=f"{os.environ['TRAINING_ENVIRONMENT_NAME']}:{env_version}",
         inputs={
             "train_data": Input(
