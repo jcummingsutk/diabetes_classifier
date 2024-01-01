@@ -23,10 +23,8 @@ steps:
 - script: |
     python -m pip install --upgrade pip
     pip install pipx
-    pipx install poetry
+    pipx install poetry==1.4.2
     poetry install
-    poetry build
-    cp dist/* ./docker_build_context/
   displayName: 'Install dependencies'
 
 - script: |
@@ -42,6 +40,12 @@ steps:
   displayName: 'Update data in blob storage'
   env: 
     STAGING_DATA_BLOB_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
+
+- script: |
+    poetry build
+    cp dist/* ../../docker_model_build_context/
+  workingDirectory: ./diabetes_classifier/diabetes_classifier_models
+  displayName: 'Install dependencies'
 
 - task: Bash@3
   inputs:
