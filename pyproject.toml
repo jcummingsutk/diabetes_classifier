@@ -25,6 +25,7 @@ python-dotenv = "^1.0.0"
 seaborn = "^0.13.0"
 azureml-mlflow = "^1.54.0.post1"
 azureml-core = "^1.54.0.post1"
+azure-containerregistry = "^1.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
@@ -33,11 +34,6 @@ flake8 = "^6.1.0"
 pre-commit = "^3.5.0"
 ipykernel = "^6.27.1"
 
-[tool.poetry.scripts]
-train_xgboost_model = "diabetes_classifier.models.xgboost.train:main"
-
-[tool.poetry.group.model.dependencies]
-mlflow = "^2.9.2"
 
 [build-system]
 requires = ["poetry-core"]

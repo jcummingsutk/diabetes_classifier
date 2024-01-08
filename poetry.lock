@@ -436,6 +436,22 @@ files = [
 ]
 
 [[package]]
+name = "azure-containerregistry"
+version = "1.2.0"
+description = "Microsoft Azure Azure Container Registry Client Library for Python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "azure-containerregistry-1.2.0.zip", hash = "sha256:4acd32821d086553eabd5ddfecbb21fb915b5d13ef8375d15afcb2c80bdc96a3"},
+    {file = "azure_containerregistry-1.2.0-py3-none-any.whl", hash = "sha256:7ba5b84911f1b381cec290b22747a679b98ddbf536fae7923124743f5ed97e6c"},
+]
+
+[package.dependencies]
+azure-core = ">=1.24.0,<2.0.0"
+isodate = ">=0.6.0"
+
+[[package]]
 name = "azure-core"
 version = "1.29.5"
 description = "Microsoft Azure Core Library for Python"
@@ -6318,4 +6334,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10, <3.12"
-content-hash = "e95baadfed2381512daef949b3b641cf6679a8bd9771796f4f8e7385984c4511"
+content-hash = "b219114aa6fdb39d83b6ee6ea4f6004b8f0c105e958a64b3e5ed599fdd9cff3d"
