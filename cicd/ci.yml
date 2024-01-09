@@ -41,12 +41,6 @@ steps:
   env: 
     DEV_DATA_BLOB_CONNECTION_STRING: $(DEV-DATA-BLOB-CONNECTION-STRING)
 
-- script: |
-    poetry build
-    cp dist/* ../../env_training/
-  workingDirectory: ./diabetes_classifier/diabetes_classifier_models
-  displayName: 'Install dependencies'
-
 - task: Bash@3
   inputs:
     targetType: 'inline'
