@@ -7,13 +7,10 @@ from functools import partial
 import mlflow
 import numpy as np
 import pandas as pd
-from diabetes_classifier_models.data_prep import (
-    create_cross_validation,
-    upsample_training_cv_data,
-)
-from diabetes_classifier_models.metrics import score_classifier
+from data_prep import create_cross_validation, upsample_training_cv_data
 from hyperopt import STATUS_OK, Trials, fmin, hp, tpe
 from hyperopt.pyll.base import scope
+from metrics import score_classifier
 from xgboost import XGBClassifier
 
 warnings.filterwarnings("ignore")
