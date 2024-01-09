@@ -18,7 +18,7 @@ if __name__ == "__main__":
     ws = Workspace(
         subscription_id=os.environ["AZURE_ML_SUBSCRIPTION_ID"],
         resource_group=os.environ["AZURE_ML_RESOURCE_GROUP_NAME"],
-        workspace_name=os.environ["AZURE_ML_WORKSPACE_NAME"],
+        workspace_name=os.environ["DEV_AZURE_ML_WORKSPACE_NAME"],
         auth=sp_auth,
     )
 
@@ -29,32 +29,27 @@ if __name__ == "__main__":
     ml_client = MLClient(
         subscription_id=os.environ["AZURE_ML_SUBSCRIPTION_ID"],
         resource_group_name=os.environ["AZURE_ML_RESOURCE_GROUP_NAME"],
-        workspace_name=os.environ["AZURE_ML_WORKSPACE_NAME"],
+        workspace_name=os.environ["DEV_AZURE_ML_WORKSPACE_NAME"],
         credential=EnvironmentCredential(),
     )
     env_version = Environment.list(ws)[os.environ["TRAINING_ENVIRONMENT_NAME"]].version
     print(f"using environment version {env_version}")
 
     command_job = command(
-        code=os.path.join(
-            "diabetes_classifier",
-            "diabetes_classifier_models",
-            "diabetes_classifier_models",
-            "xgboost",
-        ),
+        code=os.path.join("diabetes_classifier", "diabetes_classifier_training"),
         command="python train.py --num-folds 5 --train-data ${{inputs.train_data}} --test-data ${{inputs.test_data}} --num-hyperopt-evals 30 --num-hyperopt-trials-to-log 5 --target-column Diabetes",
         environment=f"{os.environ['TRAINING_ENVIRONMENT_NAME']}:{env_version}",
         inputs={
             "train_data": Input(
                 type="uri_file",
-                path="azureml://subscriptions/94f3bfe4-d65b-4af2-959a-f4cc3f4fef6a/resourcegroups/john-cummings/workspaces/john-cummings-ml/datastores/staging_diabetes_data/paths/data/processed/train.pkl",
+                path="azureml://subscriptions/94f3bfe4-d65b-4af2-959a-f4cc3f4fef6a/resourcegroups/john-cummings/workspaces/diabetes-classifier-dev/datastores/diabetes_data/paths/data/processed/train.pkl",
             ),
             "test_data": Input(
                 type="uri_file",
-                path="azureml://subscriptions/94f3bfe4-d65b-4af2-959a-f4cc3f4fef6a/resourcegroups/john-cummings/workspaces/john-cummings-ml/datastores/staging_diabetes_data/paths/data/processed/test.pkl",
+                path="azureml://subscriptions/94f3bfe4-d65b-4af2-959a-f4cc3f4fef6a/resourcegroups/john-cummings/workspaces/diabetes-classifier-dev/datastores/diabetes_data/paths/data/processed/test.pkl",
             ),
         },
-        compute="diabetes-staging-cluster",
+        compute="diabetes-cluster-dev",
         experiment_name="diabetes_prediction",
     )
     returned_job = ml_client.jobs.create_or_update(command_job)

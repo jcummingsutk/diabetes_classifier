@@ -7,9 +7,6 @@ readme = "README.md"
 packages = [{ include = "diabetes_classifier" }]
 
 [tool.poetry.dependencies]
-diabetes-classifier-models = { path = "diabetes_classifier/diabetes_classifier_models", develop = true }
-
-
 python = ">=3.10, <3.12"
 dvc = "^3.32.0"
 dvc-s3 = "^2.23.0"

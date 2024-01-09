@@ -6,12 +6,10 @@ from diabetes_classifier.env_vars import load_env
 
 if __name__ == "__main__":
     load_env()
-    connection_string = os.environ["STAGING_DATA_BLOB_CONNECTION_STRING"]
-    staging_data_container_name = os.environ["STAGING_DATA_CONTAINER_NAME"]
+    connection_string = os.environ["DEV_DATA_BLOB_CONNECTION_STRING"]
+    dev_data_container_name = os.environ["DEV_DATA_CONTAINER_NAME"]
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-    container_client = blob_service_client.get_container_client(
-        staging_data_container_name
-    )
+    container_client = blob_service_client.get_container_client(dev_data_container_name)
     blobs = [
         os.path.join("data", "raw", "diabetes.csv"),
         os.path.join("data", "processed", "diabetes.csv"),
@@ -22,10 +20,10 @@ if __name__ == "__main__":
         print(blob_filename)
         with open(blob_filename, "rb") as f:
             print(f"connection string: {connection_string}")
-            print(f"staging data container name: {staging_data_container_name}")
+            print(f"dev data container name: {dev_data_container_name}")
             blob_client = BlobClient.from_connection_string(
                 conn_str=connection_string,
-                container_name=staging_data_container_name,
+                container_name=dev_data_container_name,
                 blob_name=blob_filename,
                 max_block_size=1024 * 1024 * 4,
                 max_single_put_size=1024 * 1024 * 8,

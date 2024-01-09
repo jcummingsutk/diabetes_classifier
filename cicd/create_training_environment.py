@@ -16,12 +16,14 @@ if __name__ == "__main__":
     ws = Workspace(
         subscription_id=os.environ["AZURE_ML_SUBSCRIPTION_ID"],
         resource_group=os.environ["AZURE_ML_RESOURCE_GROUP_NAME"],
-        workspace_name=os.environ["AZURE_ML_WORKSPACE_NAME"],
+        workspace_name=os.environ["DEV_AZURE_ML_WORKSPACE_NAME"],
         auth=sp_auth,
     )
     env_name = os.environ["TRAINING_ENVIRONMENT_NAME"]
+
     build = DockerBuildContext.from_local_directory(
-        workspace=ws, path="./docker_model_build_context/"
+        workspace=ws,
+        path="./diabetes_classifier/diabetes_classifier_training/env_training/",
     )
     env = Environment.from_docker_build_context(
         name=env_name, docker_build_context=build

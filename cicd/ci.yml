@@ -31,7 +31,7 @@ steps:
     poetry run dvc pull
   displayName: 'Pull data with dvc'
   env:
-    AZURE_STORAGE_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
+    AZURE_STORAGE_CONNECTION_STRING: $(DEV-DATA-BLOB-CONNECTION-STRING)
 
 - task: Bash@3
   inputs:
@@ -39,11 +39,11 @@ steps:
     script: 'poetry run python cicd/update_data.py'
   displayName: 'Update data in blob storage'
   env: 
-    STAGING_DATA_BLOB_CONNECTION_STRING: $(STAGING-DATA-BLOB-CONNECTION-STRING)
+    DEV_DATA_BLOB_CONNECTION_STRING: $(DEV-DATA-BLOB-CONNECTION-STRING)
 
 - script: |
     poetry build
-    cp dist/* ../../docker_model_build_context/
+    cp dist/* ../../env_training/
   workingDirectory: ./diabetes_classifier/diabetes_classifier_models
   displayName: 'Install dependencies'
 

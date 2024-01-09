@@ -163,3 +163,4 @@ local_notebooks
 mlruns
 old
 environment_variable_config_secrets.env
+.venv_model_training
