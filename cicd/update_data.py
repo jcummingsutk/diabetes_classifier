@@ -19,8 +19,6 @@ if __name__ == "__main__":
     for blob_filename in blobs:
         print(blob_filename)
         with open(blob_filename, "rb") as f:
-            print(f"connection string: {connection_string}")
-            print(f"dev data container name: {dev_data_container_name}")
             blob_client = BlobClient.from_connection_string(
                 conn_str=connection_string,
                 container_name=dev_data_container_name,
