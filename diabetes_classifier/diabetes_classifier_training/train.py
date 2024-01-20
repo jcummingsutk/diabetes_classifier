@@ -210,6 +210,7 @@ def main():
     features = [col for col in df_train.columns if col != target_column]
     mlflow.set_experiment("diabetes_prediction")
     with mlflow.start_run():
+        mlflow.set_tag(key="isParentRun", value=1)
         train_xgboost_classifier(
             df_train=df_train,
             df_test=df_test,
