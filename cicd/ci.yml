@@ -32,43 +32,43 @@ steps:
     poetry install
   displayName: 'Install dependencies'
 
-- script: |
-    poetry run dvc pull
-  displayName: 'Pull data with dvc'
-  env:
-    AZURE_STORAGE_CONNECTION_STRING: $(DEV-DATA-BLOB-CONNECTION-STRING)
+# - script: |
+#     poetry run dvc pull
+#   displayName: 'Pull data with dvc'
+#   env:
+#     AZURE_STORAGE_CONNECTION_STRING: $(DEV-DATA-BLOB-CONNECTION-STRING)
 
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'poetry run python cicd/update_data.py'
-  displayName: 'Update data in blob storage'
-  env: 
-    DEV_DATA_BLOB_CONNECTION_STRING: $(DEV-DATA-BLOB-CONNECTION-STRING)
+# - task: Bash@3
+#   inputs:
+#     targetType: 'inline'
+#     script: 'poetry run python cicd/update_data.py'
+#   displayName: 'Update data in blob storage'
+#   env: 
+#     DEV_DATA_BLOB_CONNECTION_STRING: $(DEV-DATA-BLOB-CONNECTION-STRING)
 
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'poetry run python cicd/create_training_environment.py'
-  displayName: 'Create training environment'
-  env: 
-    SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
+# - task: Bash@3
+#   inputs:
+#     targetType: 'inline'
+#     script: 'poetry run python cicd/create_training_environment.py'
+#   displayName: 'Create training environment'
+#   env: 
+#     SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
 
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'poetry run python cicd/submit_training_job.py'
-  displayName: 'Submit training job'
-  env: 
-    SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
+# - task: Bash@3
+#   inputs:
+#     targetType: 'inline'
+#     script: 'poetry run python cicd/submit_training_job.py'
+#   displayName: 'Submit training job'
+#   env: 
+#     SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
 
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: 'poetry run python cicd/deploy_staging_batch_endpoint.py'
-  displayName: 'Run model in staging workspace'
-  env: 
-    SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
+# - task: Bash@3
+#   inputs:
+#     targetType: 'inline'
+#     script: 'poetry run python cicd/deploy_staging_batch_endpoint.py'
+#   displayName: 'Run model in staging workspace'
+#   env: 
+#     SERVICE_PRINCIPAL_CLIENT_SECRET: $(SERVICE-PRINCIPAL-CLIENT-SECRET)
 
 - task: Bash@3
   inputs:
