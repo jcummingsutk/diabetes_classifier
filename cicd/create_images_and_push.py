@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from glob import glob
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -48,20 +49,29 @@ if __name__ == "__main__":
     )
 
     # Create and save the figures
+    print("creating and saving figures")
     df_predictions = pd.read_csv("data_pred.csv")
     y_true = df_predictions["Diabetes"].to_list()
     y_pred = df_predictions["prediction"].to_list()
+    todays_date = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
     os.makedirs("images", exist_ok=True)
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 7))
+    os.makedirs(os.path.join("images", todays_date), exist_ok=True)
+
+    print("creating confusion matrix")
+    # fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 7))
     cm = confusion_matrix(y_true, y_pred)
     disp = ConfusionMatrixDisplay(
         confusion_matrix=cm, display_labels=["No Diabetes", "Diabetes"]
     )
-    disp.plot(ax=ax)
+    disp.plot()
     plt.tight_layout()
     plt.savefig(os.path.join("images", "confusion_matrix.png"))
+    plt.savefig(
+        os.path.join("images", todays_date, f"{todays_date}_confusion_matrix.png")
+    )
 
+    print("creating classification report")
     report = classification_report(
         y_true,
         y_pred,
@@ -86,16 +96,21 @@ if __name__ == "__main__":
         vmax=1.0,
     )
     plt.savefig(os.path.join("images", "classification_report.png"))
+    plt.savefig(
+        os.path.join("images", todays_date, f"{todays_date}_classification_report.png")
+    )
 
     # Upload images to public storage for my work sample
+    print("Uploading images")
     connection_string = os.environ["DEV_DATA_BLOB_CONNECTION_STRING"]
     dev_data_container_name = os.environ["PUBLIC_CONTAINER_NAME"]
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     container_client = blob_service_client.get_container_client(dev_data_container_name)
-    blobs = [
-        os.path.join("images", "classification_report.png"),
-        os.path.join("images", "confusion_matrix.png"),
-    ]
+    blobs = []
+
+    for filename in glob("images/**/*.png", recursive=True):
+        blobs.append(filename)
+
     for blob_filename in blobs:
         print(blob_filename)
         with open(blob_filename, "rb") as f:
