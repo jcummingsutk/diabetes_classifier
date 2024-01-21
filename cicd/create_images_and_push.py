@@ -46,11 +46,20 @@ if __name__ == "__main__":
         download_path=".",
         output_name="score",
     )
+
+    # Create and save the figures
     df_predictions = pd.read_csv("data_pred.csv")
     y_true = df_predictions["Diabetes"].to_list()
     y_pred = df_predictions["prediction"].to_list()
 
     os.makedirs("images", exist_ok=True)
+
+    cm = confusion_matrix(y_true, y_pred)
+    disp = ConfusionMatrixDisplay(
+        confusion_matrix=cm, display_labels=["No Diabetes", "Diabetes"]
+    )
+    disp.plot()
+    plt.savefig(os.path.join("images", "confusion_matrix.png"))
 
     report = classification_report(
         y_true,
@@ -76,14 +85,6 @@ if __name__ == "__main__":
         vmax=1.0,
     )
     plt.savefig(os.path.join("images", "classification_report.png"))
-    plt.close("all")
-
-    cm = confusion_matrix(y_true, y_pred)
-    disp = ConfusionMatrixDisplay(
-        confusion_matrix=cm, display_labels=["No Diabetes", "Diabetes"]
-    )
-
-    plt.savefig(os.path.join("images", "confusion_matrix.png"))
 
     # Upload images to public storage
     connection_string = os.environ["DEV_DATA_BLOB_CONNECTION_STRING"]
