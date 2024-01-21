@@ -7,14 +7,11 @@ from diabetes_classifier.env_vars import load_env
 if __name__ == "__main__":
     load_env()
     connection_string = os.environ["DEV_DATA_BLOB_CONNECTION_STRING"]
-    dev_data_container_name = os.environ["DEV_DATA_CONTAINER_NAME"]
+    dev_data_container_name = os.environ["STAGING_DATA_CONTAINER_NAME"]
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     container_client = blob_service_client.get_container_client(dev_data_container_name)
     blobs = [
-        os.path.join("data", "raw", "diabetes.csv"),
-        os.path.join("data", "processed", "diabetes.csv"),
-        os.path.join("data", "processed", "train.pkl"),
-        os.path.join("data", "processed", "test.pkl"),
+        os.path.join("data", "staging", "batch", "data.csv"),
     ]
     for blob_filename in blobs:
         print(blob_filename)
