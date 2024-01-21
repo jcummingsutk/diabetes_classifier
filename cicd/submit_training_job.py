@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     command_job = command(
         code=os.path.join("diabetes_classifier", "diabetes_classifier_training"),
-        command="python train.py --num-folds 5 --train-data ${{inputs.train_data}} --test-data ${{inputs.test_data}} --num-hyperopt-evals 30 --num-hyperopt-trials-to-log 5 --target-column Diabetes",
+        command="python train.py --num-folds 5 --train-data ${{inputs.train_data}} --test-data ${{inputs.test_data}} --num-hyperopt-evals 100 --num-hyperopt-trials-to-log 5 --target-column Diabetes",
         environment=f"{os.environ['TRAINING_ENVIRONMENT_NAME']}:{env_version}",
         inputs={
             "train_data": Input(
