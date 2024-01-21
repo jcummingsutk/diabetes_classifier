@@ -91,7 +91,8 @@ if __name__ == "__main__":
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     container_client = blob_service_client.get_container_client(dev_data_container_name)
     blobs = [
-        os.path.join("image.png"),
+        os.path.join("images", "classification_report.png"),
+        os.path.join("images", "confusion_matrix.png"),
     ]
     for blob_filename in blobs:
         print(blob_filename)
