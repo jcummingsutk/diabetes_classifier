@@ -87,7 +87,7 @@ if __name__ == "__main__":
     )
     plt.savefig(os.path.join("images", "classification_report.png"))
 
-    # Upload images to public storage
+    # Upload images to public storage for my work sample
     connection_string = os.environ["DEV_DATA_BLOB_CONNECTION_STRING"]
     dev_data_container_name = os.environ["PUBLIC_CONTAINER_NAME"]
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
