@@ -53,12 +53,12 @@ if __name__ == "__main__":
     y_pred = df_predictions["prediction"].to_list()
 
     os.makedirs("images", exist_ok=True)
-
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 7))
     cm = confusion_matrix(y_true, y_pred)
     disp = ConfusionMatrixDisplay(
         confusion_matrix=cm, display_labels=["No Diabetes", "Diabetes"]
     )
-    disp.plot()
+    disp.plot(ax=ax)
     plt.tight_layout()
     plt.savefig(os.path.join("images", "confusion_matrix.png"))
 
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         ],
         output_dict=True,
     )
-    fig, ax = plt.subplots(nrows=1, ncols=1)
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 7))
     fig.tight_layout()
     fig = sns.heatmap(
         pd.DataFrame(
