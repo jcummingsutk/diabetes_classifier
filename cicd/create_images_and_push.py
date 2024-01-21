@@ -59,6 +59,7 @@ if __name__ == "__main__":
         confusion_matrix=cm, display_labels=["No Diabetes", "Diabetes"]
     )
     disp.plot()
+    plt.tight_layout()
     plt.savefig(os.path.join("images", "confusion_matrix.png"))
 
     report = classification_report(
